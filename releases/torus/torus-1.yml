@@ -1,0 +1,26 @@
+---
+packages:
+- name: golang
+  version: 8fd5d2ee6edbd202c732ed08982360aa05b42339
+  fingerprint: 8fd5d2ee6edbd202c732ed08982360aa05b42339
+  sha1: a84a3a3edd4c827956ec9f7f588d3e983e6d411a
+  dependencies: []
+- name: torus
+  version: 258f1d4001ffeba2735472b1ce7cefb1fa0b8bcb
+  fingerprint: 258f1d4001ffeba2735472b1ce7cefb1fa0b8bcb
+  sha1: 5b5cd34f4d8bf3f0f535be7487980fd7f2bb07ce
+  dependencies:
+  - golang
+jobs:
+- name: torusd
+  version: 964cd844febe8a71f14204476aa9da963d16dd74
+  fingerprint: 964cd844febe8a71f14204476aa9da963d16dd74
+  sha1: 80718bed8f26b558c3ba291eb66e90c4843d2fe2
+license:
+  version: 99711acad6032fe4c7f657779849ad9400497bf5
+  fingerprint: 99711acad6032fe4c7f657779849ad9400497bf5
+  sha1: 3f305b1ba0702d9aac3f9651159ea23d8f04ce43
+commit_hash: 0226cd7c
+uncommitted_changes: true
+name: torus
+version: '1'
