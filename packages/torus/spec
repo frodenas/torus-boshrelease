@@ -1,0 +1,9 @@
+---
+name: torus
+
+dependencies:
+  - golang
+
+files:
+  - common/utils.sh
+  - github.com/coreos/torus/**/*

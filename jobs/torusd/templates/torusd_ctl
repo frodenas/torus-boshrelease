@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+RUN_DIR=/var/vcap/sys/run/torusd
+LOG_DIR=/var/vcap/sys/log/torusd
+TMP_DIR=/var/vcap/sys/tmp/torusd
+STORE_DIR=/var/vcap/store/torusd
+mkdir -p ${RUN_DIR} ${LOG_DIR} ${TMP_DIR} ${STORE_DIR}
+
+PIDFILE=${RUN_DIR}/torusd.pid
+
+source /var/vcap/packages/torus/utils.sh
+
+case $1 in
+  start)
+    pid_guard ${PIDFILE} "torusd"
+    echo $$ > ${PIDFILE}
+
+    if ! mountpoint -q ${STORE_DIR}; then
+      echo "WARNING: ${STORE_DIR} is not on a persistent disk"
+    fi
+
+    exec /var/vcap/packages/torus/bin/torusd \
+      <% if p('torusd.auto_join') %> \
+      --auto-join \
+      <% end %> \
+      --data-dir ${STORE_DIR} \
+      <% if p('torusd.debug') %> \
+      --debug \
+      <% end %> \
+      <% if_link('etcd') do |etcd| %> \
+      --etcd <%= etcd.instances.first.address %>:<%= etcd.p('port') %> \
+      <% end %> \
+      <% if p('torusd.debug_init') %> \
+      -debug-init \
+      <% end %> \
+      --host <%= spec.address %> \
+      --peer-address http://<%= spec.address %>:<%= p('torusd.peer_port') %> \
+      --port <%= p('torusd.http_port') %> \
+      --read-cache-size <%= p('torusd.read_cache_size') %> \
+      --readlevel <%= p('torusd.read_level') %> \
+      --size <%= spec.persistent_disk %>MiB \
+      --writelevel <%= p('torusd.write_level') %> \
+      >>  ${LOG_DIR}/torusd.stdout.log \
+      2>> ${LOG_DIR}/torusd.stderr.log
+    ;;
+
+  stop)
+    kill_and_wait ${PIDFILE}
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}" ;;
+
+esac
+exit 0

@@ -1,0 +1,39 @@
+---
+name: torusd
+
+packages:
+  - torus
+
+templates:
+  torusd_ctl: bin/torusd_ctl
+
+consumes:
+  - name: etcd
+    type: peer
+    optional: true
+
+properties:
+  torusd.auto_join:
+    description: "Automatically join the storage pool"
+    default: true
+  torusd.debug:
+    description: "Turn on debug output"
+    default: false
+  torusd.debug_init:
+    description: "Run a default init for the MDS if one doesn't exist"
+    default: false
+  torusd.peer_port:
+    description: "Port to listen on for intra-cluster data"
+    default: 40000
+  torusd.http_port:
+    description: "Port to listen on for HTTP"
+    default: 4321
+  torusd.read_cache_size:
+    description: "Amount of memory to use for read cache"
+    default: "20MiB"
+  torusd.read_level:
+    description: "Read replication level"
+    default: "block"
+  torusd.write_level:
+    description: "Write replication level"
+    default: "all"

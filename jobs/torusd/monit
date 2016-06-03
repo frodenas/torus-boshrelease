@@ -1,0 +1,5 @@
+check process torusd
+  with pidfile /var/vcap/sys/run/torusd/torusd.pid
+  start program "/var/vcap/jobs/torusd/bin/torusd_ctl start"
+  stop program "/var/vcap/jobs/torusd/bin/torusd_ctl stop"
+  group vcap
